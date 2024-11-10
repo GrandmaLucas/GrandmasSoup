@@ -45,7 +45,7 @@ func _physics_process(delta):
 	
 	move_and_slide()
 
-func pickup_item(item_mesh, should_destroy):
+func pickup_item(item_mesh, should_destroy, item_type = null):
 	if inventory:
-		return inventory.pickup_item(item_mesh, should_destroy)
+		return inventory.pickup_item(item_mesh, should_destroy, item_type)
 	return false
