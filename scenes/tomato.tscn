@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjrcc5bo1okxi"]
+
+[ext_resource type="PackedScene" uid="uid://ujjw0rallxj3" path="res://scenes/hand_tomato.tscn" id="1_nq7si"]
+
+[node name="Tomato" instance=ExtResource("1_nq7si")]
