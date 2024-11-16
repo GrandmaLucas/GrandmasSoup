@@ -49,3 +49,11 @@ func pickup_item(item_mesh, should_destroy, item_type = null):
 	if inventory:
 		return inventory.pickup_item(item_mesh, should_destroy, item_type)
 	return false
+
+func find_collector_in_range() -> Node3D:
+	if inventory and inventory.collector:
+		var collector = inventory.collector
+		var distance = global_position.distance_to(collector.global_position)
+		if distance <= 3:
+			return collector
+	return null

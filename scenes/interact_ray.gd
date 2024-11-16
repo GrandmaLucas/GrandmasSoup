@@ -2,6 +2,7 @@ extends RayCast3D
 
 @onready var prompt = $Prompt
 @onready var player = find_player()
+@onready var inventory: Node3D = $"../CharacterBody3D/Head/Camera3D/Inventory"
 
 func find_player():
 	var current_node = self
@@ -20,10 +21,10 @@ func _physics_process(_delta):
 		
 		# If we hit a StaticBody3D or Area3D, check if its parent is Interactable
 		if collider is StaticBody3D or collider is Area3D:
-			if collider.get_parent() is Interactable:
+			if collider.get_parent() is Interactable or Cook:
 				interactable = collider.get_parent()
 		# If we directly hit an Interactable somehow
-		elif collider is Interactable:
+		elif collider is Interactable or Cook:
 			interactable = collider
 			
 		if interactable:
