@@ -2,7 +2,6 @@ extends RayCast3D
 
 @onready var prompt = $Prompt
 @onready var player = find_player()
-@onready var inventory: Node3D = $"../CharacterBody3D/Head/Camera3D/Inventory"
 
 func find_player():
 	var current_node = self

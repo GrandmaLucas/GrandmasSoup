@@ -1,10 +1,10 @@
 [gd_scene load_steps=86 format=3 uid="uid://cw5bvvhw2oarf"]
 
-[ext_resource type="Script" path="res://scenes/main.gd" id="1_0jmg2"]
 [ext_resource type="Texture2D" uid="uid://bxubhn702bjn1" path="res://images/photoshopPlans.png" id="1_v0qne"]
 [ext_resource type="Script" path="res://scenes/gs_player.gd" id="2_0a37j"]
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="3_oqjwt"]
 [ext_resource type="Script" path="res://scripts/interactable.gd" id="3_pov2y"]
+[ext_resource type="Script" path="res://scripts/notebook.gd" id="4_4d8m7"]
 [ext_resource type="Texture2D" uid="uid://23ye54h72wos" path="res://images/recticle.png" id="4_41ft2"]
 [ext_resource type="Script" path="res://scenes/interact_ray.gd" id="4_ygp3s"]
 [ext_resource type="Material" uid="uid://cd74tc1wn0ku4" path="res://materials/hand_material.tres" id="6_aw774"]
@@ -3728,7 +3728,6 @@ shadow_mesh = SubResource("ArrayMesh_4sghn")
 size = Vector3(0.449951, 1.12415, 0.433411)
 
 [node name="RuffMapLayout" type="Node"]
-script = ExtResource("1_0jmg2")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_synvm")
@@ -4032,6 +4031,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.606084, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head"]
 
+[node name="Control" type="Control" parent="CharacterBody3D/Head/Camera3D" node_paths=PackedStringArray("player")]
+layout_mode = 3
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_4d8m7")
+cook = NodePath("../../../../Cook")
+player = NodePath("../../..")
+
 [node name="TextureRect" type="TextureRect" parent="CharacterBody3D/Head/Camera3D"]
 custom_minimum_size = Vector2(3, 3)
 anchors_preset = 8
@@ -4052,10 +4063,10 @@ texture = ExtResource("4_41ft2")
 [node name="temp_information" type="Label" parent="CharacterBody3D/Head/Camera3D/TextureRect"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = -157.5
-anchor_top = 71.1667
-anchor_right = -70.52
-anchor_bottom = 104.047
+anchor_left = -157.84
+anchor_top = 59.16
+anchor_right = -67.28
+anchor_bottom = 94.38
 grow_vertical = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -4063,8 +4074,9 @@ theme_override_constants/shadow_offset_x = 10
 theme_override_constants/shadow_offset_y = 35
 theme_override_constants/outline_size = 55
 theme_override_constants/shadow_outline_size = 80
-theme_override_font_sizes/font_size = 400
-text = "Q - to discard last item"
+theme_override_font_sizes/font_size = 360
+text = "TAB - to open notebook
+Q - to discard last item"
 metadata/_edit_use_anchors_ = true
 
 [node name="InteractRay" type="RayCast3D" parent="CharacterBody3D/Head/Camera3D"]

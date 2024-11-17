@@ -5,8 +5,8 @@ var page_number: Label
 var prev_button: Button
 var next_button: Button
 var notebook_container: PanelContainer
-@export var cook: NodePath
-@onready var cook_node: Cook = get_node(cook)
+@export var cook: NodePath  # Assign this in editor
+@export var player: CharacterBody3D  # Assign this in editor
 
 var current_page: int = 0
 var attempts: Array = []
@@ -34,7 +34,7 @@ class RecipeAttempt:
 		correct_items = results.get("correct_items", 0)
 		wrong_items = results.get("wrong_items", 0)
 		feedback = results.get("feedback", "")
-	
+
 	func format_page() -> String:
 		var text = "[center][b]Attempt from %s[/b][/center]\n\n" % timestamp
 		
@@ -54,6 +54,16 @@ class RecipeAttempt:
 		return text
 
 func _ready():
+	# Get cook node reference
+	var cook_node = get_node_or_null(cook)
+	if cook_node:
+		print("Found cook node: ", cook_node.name)
+		if not cook_node.is_connected("recipe_submitted", _on_recipe_submitted):
+			cook_node.connect("recipe_submitted", _on_recipe_submitted)
+			print("Connected recipe_submitted signal")
+	else:
+		push_error("Notebook: Cook node not found! Check editor reference")
+
 	# Set up the control to take full screen
 	anchor_right = 1.0
 	anchor_bottom = 1.0
@@ -106,10 +116,6 @@ func _ready():
 	# Initialize UI
 	update_page_buttons()
 	
-	# Connect to cook's signals
-	if cook_node:
-		cook_node.connect("recipe_submitted", _on_recipe_submitted)
-	
 	# Hide notebook initially
 	hide()
 	
@@ -129,24 +135,41 @@ func _input(event: InputEvent):
 func toggle_notebook():
 	visible = !visible
 	if visible:
+		 # Free mouse for UI interaction
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		 # Disable player movement
+		if player:
+			player.set_physics_process(false)
 		# Update content when showing notebook
 		update_page_content()
+	else:
+		# Recapture mouse for player movement
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		# Re-enable player movement
+		if player:
+			player.set_physics_process(true)
 
 func _on_recipe_submitted(results: Dictionary):
-	var attempt = RecipeAttempt.new(results, cook_node.collected_items)
-	attempts.push_front(attempt)  # Add new attempts at the start
-	current_page = 0
-	update_page_content()
-	update_page_buttons()
+	print("Recipe submitted signal received")  # Debug print
+	var cook_node = get_node_or_null(cook)
+	if cook_node:
+		var attempt = RecipeAttempt.new(results, cook_node.collected_items)
+		attempts.append(attempt)  # Changed from push_front to append
+		current_page = attempts.size() - 1  # Go to last page to see newest entry
+		update_page_content()
+		update_page_buttons()
+	else:
+		push_error("Notebook: Cook node not found! Check editor reference")
 
 func update_page_content():
+	print("Updating page content")  # Debug print
 	if attempts.size() > 0:
 		var attempt = attempts[current_page]
 		page_content.text = attempt.format_page()
 		page_number.text = "Page %d/%d" % [current_page + 1, attempts.size()]
 	else:
 		page_content.text = "[center]No attempts recorded yet.[/center]"
-		page_number.text = "Page 0/0"
+		page_number.text = "Page 1/1"
 
 func next_page():
 	if current_page < attempts.size() - 1:
@@ -169,3 +192,6 @@ func _on_prev_button_pressed():
 
 func _on_next_button_pressed():
 	next_page()
+
+func set_player(p_player: Node3D):
+	player = p_player

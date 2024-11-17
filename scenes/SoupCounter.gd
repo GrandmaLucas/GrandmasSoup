@@ -31,7 +31,7 @@ func _on_items_received(items_count: int):
 	update_display()
 
 func _on_recipe_submitted(_results: Dictionary):
-	update_display()
+	reset()
 
 func update_display():
 	# Update the counter text

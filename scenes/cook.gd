@@ -30,8 +30,10 @@ func receive_items(items_array: Array) -> Dictionary:
 		"error": ""
 	}
 	
-	# Check if adding these items would exceed the limit
-	if collected_items.size() + items_array.size() > recipe.max_items:
+	var potential_total = collected_items.size() + items_array.size()
+	
+	# Strict check for exact limit
+	if potential_total > recipe.max_items:
 		results.error = "Too many items! Only %d more items can be accepted." % (recipe.max_items - collected_items.size())
 		return results
 	
@@ -52,10 +54,12 @@ func receive_items(items_array: Array) -> Dictionary:
 	# Emit signal with count of received items
 	emit_signal("items_received", results.items_accepted)
 	
-	# Check if we've reached max items
+	# Check if we've exactly reached max items (15)
 	if collected_items.size() == recipe.max_items:
 		var validation_results = validate_collection()
+		print("Emitting recipe_submitted signal")
 		emit_signal("recipe_submitted", validation_results)
+		clear_collection()  # Clear after validation
 	
 	return results
 
@@ -87,6 +91,7 @@ func print_collection_status():
 		print("%s: %d" % [item_name, item_counts[item_name]])
 
 func clear_collection():
+	print("Cook collection cleared!")
 	collected_items.clear()
 
 func _ready():
