@@ -69,7 +69,6 @@ func validate_collection() -> Dictionary:
 	print("\n=== Recipe Validation ===")
 	print("Total items collected: %d" % collected_items.size())
 	print("Accuracy: %.1f%%" % results.accuracy_percentage)
-	print("Correct items: %d" % results.correct_items)
 	print("Wrong items: %d" % results.wrong_items)
 	print("\nFeedback:")
 	print(results.feedback)

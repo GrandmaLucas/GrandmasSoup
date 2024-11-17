@@ -40,7 +40,7 @@ size = Vector2(140, 140)
 data = PackedVector3Array(35, 0, 35, -35, 0, 35, 35, 0, -35, -35, 0, 35, -35, 0, -35, 35, 0, -35)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r6743"]
-size = Vector3(2.59326, 0.255005, 0.431763)
+size = Vector3(2.69584, 0.255005, 0.431763)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hon1n"]
 radius = 0.25
@@ -3764,7 +3764,19 @@ size = Vector3(2.95245, 1, 2.40991)
 collision_layer = 128
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ruff3DHouse/wall/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 0.895634, -0.444792, 0, 0.444792, 0.895634, -0.0979004, 0.283331, 1.339)
+transform = Transform3D(1, 0, 0, 0, 0.895634, -0.444792, 0, 0.444792, 0.895634, -0.119682, 0.283331, 1.339)
+shape = SubResource("BoxShape3D_r6743")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Ruff3DHouse/wall/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.895634, -0.444792, 0, 0.444792, 0.895634, -0.106234, 0.497496, 0.0285101)
+shape = SubResource("BoxShape3D_r6743")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Ruff3DHouse/wall/StaticBody3D"]
+transform = Transform3D(0.87021, -0.219141, -0.441263, 0, 0.895634, -0.444792, 0.492682, 0.387062, 0.779389, -2.30155, 0.283331, 0.771517)
+shape = SubResource("BoxShape3D_r6743")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Ruff3DHouse/wall/StaticBody3D"]
+transform = Transform3D(0.870356, 0.218949, 0.44107, 0, 0.895712, -0.444635, -0.492424, 0.386991, 0.779588, 2.04931, 0.283331, 0.771517)
 shape = SubResource("BoxShape3D_r6743")
 
 [node name="wall4" type="CSGBox3D" parent="Ruff3DHouse"]
@@ -3774,21 +3786,19 @@ collision_layer = 128
 collision_mask = 5
 size = Vector3(2.70001, 1.09033, 1.10547)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Ruff3DHouse/wall4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0371163, -0.650764)
+[node name="wall5" type="CSGBox3D" parent="Ruff3DHouse"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2499, 0.430392, -2.40913)
+use_collision = true
 collision_layer = 128
+collision_mask = 5
+size = Vector3(0.0140675, 1.79346, 2.39636)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ruff3DHouse/wall4/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 0.895634, -0.444792, 0, 0.444792, 0.895634, -0.0979004, 0.283331, 1.339)
-shape = SubResource("BoxShape3D_r6743")
-
-[node name="StaticBody3D2" type="StaticBody3D" parent="Ruff3DHouse/wall4"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.49732, 0.0484738, 0.660507)
+[node name="wall19" type="CSGBox3D" parent="Ruff3DHouse"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.60728, 0.430392, -2.40913)
+use_collision = true
 collision_layer = 128
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ruff3DHouse/wall4/StaticBody3D2"]
-transform = Transform3D(1, 0, 0, 0, 0.895634, -0.444792, 0, 0.444792, 0.895634, -0.0979004, 0.283331, 1.339)
-shape = SubResource("BoxShape3D_r6743")
+collision_mask = 5
+size = Vector3(0.0140675, 1.79346, 2.39636)
 
 [node name="wall6" type="CSGBox3D" parent="Ruff3DHouse"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.84013, 2.3624, -3.53774)

@@ -2,9 +2,10 @@ extends Resource
 class_name Recipe
 
 var required_items = {
-	"tomato": 9,
-	"carrot": 4,
-	"onion": 2
+	"tomato": 5,
+	"carrot": 5,
+	"onion": 5,
+	#"pepper": 0,
 }
 
 var max_items = 15
@@ -12,7 +13,6 @@ var max_items = 15
 func validate_items(held_items: Array) -> Dictionary:
 	var counts = {}
 	var results = {
-		"correct_items": 0,
 		"wrong_items": 0,
 		"accuracy_percentage": 0.0,
 		"feedback": "",
@@ -26,43 +26,51 @@ func validate_items(held_items: Array) -> Dictionary:
 		counts[item_id] = counts.get(item_id, 0) + 1
 		results.total_submitted += 1
 	
-	# Calculate correct and wrong items
+	# Track worst differences
+	var worst_extra = {"item": "", "amount": 0}
+	var worst_over = {"item": "", "amount": 0}  
+	var worst_under = {"item": "", "amount": 0}
+	
+	# Check required items
 	var total_required = 0
 	for item_id in required_items:
 		total_required += required_items[item_id]
-		var held_count = counts.get(item_id, 0)
-		
-		if held_count > required_items[item_id]:
-			results.wrong_items += held_count - required_items[item_id]
-			results.correct_items += required_items[item_id]
-		else:
-			results.correct_items += held_count
-	
-	# Count extra items not in recipe
-	for item_id in counts:
-		if not required_items.has(item_id):
-			results.wrong_items += counts[item_id]
-	
-	# Calculate accuracy percentage
-	results.accuracy_percentage = (float(results.correct_items) / total_required) * 100
-	
-	# Generate feedback
-	var feedback_parts = []
-	for item_id in required_items:
 		var held = counts.get(item_id, 0)
 		var required = required_items[item_id]
 		var diff = held - required
 		
-		if diff < 0:
-			feedback_parts.append("Need %d more %s" % [abs(diff), item_id])
-		elif diff > 0:
-			feedback_parts.append("Too many %s (+%d)" % [item_id, diff])
+		if diff > 0:
+			results.wrong_items += diff
+			if diff > worst_over.amount:
+				worst_over = {"item": item_id, "amount": diff}
+		elif diff < 0:
+			results.wrong_items -= diff
+			if abs(diff) > worst_under.amount:
+				worst_under = {"item": item_id, "amount": abs(diff)}
+		print(diff)
+	print(results.wrong_items)
 	
+	# Check extra unrequired items
 	for item_id in counts:
 		if not required_items.has(item_id):
-			feedback_parts.append("%s not needed" % item_id)
+			var amount = counts[item_id]
+			results.wrong_items += amount
+			if amount > worst_extra.amount:
+				worst_extra = {"item": item_id, "amount": amount}
 	
-	results.feedback = "\n".join(feedback_parts)
-	results.is_perfect = results.correct_items == total_required and results.wrong_items == 0
+	# Calculate accuracy percentage
+	results.accuracy_percentage = (1-(float(results.wrong_items) / total_required)) * 100
+	
+	# Determine worst case and set feedback
+	if worst_extra.amount > 0:
+		results.feedback = "%s not needed in recipe" % worst_extra.item
+	elif worst_over.amount > worst_under.amount:
+		results.feedback = "Too many %s" % worst_over.item
+	elif worst_under.amount > 0:
+		results.feedback = "Need more %s" % worst_under.item
+	else:
+		results.feedback = "Perfect!"
+	
+	results.is_perfect = (results.wrong_items == 0)
 	
 	return results

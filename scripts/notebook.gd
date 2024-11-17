@@ -16,7 +16,6 @@ class RecipeAttempt:
 	var items_collected: Dictionary
 	var total_items: int
 	var accuracy: float
-	var correct_items: int
 	var wrong_items: int
 	var feedback: String
 	
@@ -31,24 +30,22 @@ class RecipeAttempt:
 		
 		total_items = results.get("total_submitted", 0)
 		accuracy = results.get("accuracy_percentage", 0.0)
-		correct_items = results.get("correct_items", 0)
 		wrong_items = results.get("wrong_items", 0)
 		feedback = results.get("feedback", "")
 
 	func format_page() -> String:
 		var text = "[center][b]Attempt from %s[/b][/center]\n\n" % timestamp
 		
-		text += "[b]=== Ingredients Used ===[/b]\n"
+		text += "[b]=== Ingredients ===[/b]\n"
 		for item_name in items_collected:
 			text += "%s: %d\n" % [item_name, items_collected[item_name]]
 		
-		text += "\n[b]=== Cook's Feedback ===[/b]\n"
+		text += "\n[b]=== Statistics ===[/b]\n"
 		text += "Total items: %d\n" % total_items
 		text += "Accuracy: %.1f%%\n" % accuracy
-		text += "Correct items: %d\n" % correct_items
 		text += "Wrong items: %d\n\n" % wrong_items
 		
-		text += "[b]Notes:[/b]\n"
+		text += "[b]=== Cook's Feedback ===[/b]\n"
 		text += feedback.replace("\n", "\n• ")
 		
 		return text
@@ -135,16 +132,12 @@ func _input(event: InputEvent):
 func toggle_notebook():
 	visible = !visible
 	if visible:
-		 # Free mouse for UI interaction
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		 # Disable player movement
 		if player:
 			player.set_physics_process(false)
 		# Update content when showing notebook
 		update_page_content()
 	else:
-		# Recapture mouse for player movement
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		# Re-enable player movement
 		if player:
 			player.set_physics_process(true)
