@@ -2,12 +2,12 @@ extends Resource
 class_name Recipe
 
 var required_items = {
-	"tomato": 10,
-	"carrot": 3,
+	"tomato": 9,
+	"carrot": 4,
 	"onion": 2
 }
 
-var max_items = 20
+var max_items = 15
 
 func validate_items(held_items: Array) -> Dictionary:
 	var counts = {}

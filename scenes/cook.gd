@@ -1,3 +1,4 @@
+#Cook.gd
 extends Node3D
 class_name Cook
 
@@ -5,14 +6,19 @@ class_name Cook
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @export var prompt_message = "Give Ingredients"
 @onready var inventory: Node3D = $"../CharacterBody3D/Head/Camera3D/Inventory"
+@onready var recipe = Recipe.new()
+
+var max_items: int:
+	get:
+		return recipe.max_items if recipe else 15
 
 signal recipe_submitted(results)
 signal item_received(item_type)
+signal items_received(items_count)
 
 func interact(player):
 	inventory.give_current_item()
 
-@onready var recipe = Recipe.new()
 var collected_items = []
 
 func get_prompt():
@@ -85,6 +91,8 @@ func clear_collection():
 	collected_items.clear()
 
 func _ready():
+	if !recipe:
+		recipe = Recipe.new()
 	play_idle_animation()
 
 func _process(_delta):
