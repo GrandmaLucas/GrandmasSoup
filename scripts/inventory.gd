@@ -120,18 +120,6 @@ func submit_recipe():
 			print("\n=== Recipe Submission Error ===")
 			print(results.error)
 			print("=====================\n")
-		else:
-			print("\n=== Recipe Validation ===")
-			print("Items submitted: %d" % results.total_submitted)
-			print("Accuracy: %.1f%%" % results.accuracy_percentage)
-			print("Correct items: %d" % results.correct_items)
-			print("Wrong items: %d" % results.wrong_items)
-			print("\nFeedback:")
-			print(results.feedback)
-			
-			if results.is_perfect:
-				print("\nPerfect match! You found the recipe!")
-			print("=====================\n")
 
 func give_current_item():
 	if collector and held_items.size() > 0:

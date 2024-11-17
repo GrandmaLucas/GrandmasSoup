@@ -1,4 +1,3 @@
-#Cook.gd
 extends Node3D
 class_name Cook
 
@@ -16,7 +15,7 @@ signal recipe_submitted(results)
 signal item_received(item_type)
 signal items_received(items_count)
 
-func interact(player):
+func interact(_player):
 	inventory.give_current_item()
 
 var collected_items = []
@@ -64,7 +63,7 @@ func validate_collection() -> Dictionary:
 	var results = recipe.validate_items(collected_items)
 	
 	print("\n=== Recipe Validation ===")
-	print("Total items colected: %d" % collected_items.size())
+	print("Total items collected: %d" % collected_items.size())
 	print("Accuracy: %.1f%%" % results.accuracy_percentage)
 	print("Correct items: %d" % results.correct_items)
 	print("Wrong items: %d" % results.wrong_items)
