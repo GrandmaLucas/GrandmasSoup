@@ -1,7 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://ujjw0rallxj3"]
-
-[ext_resource type="PackedScene" uid="uid://bfd176bxv6jdo" path="res://assets/Tomato.glb" id="1_jorbb"]
-[ext_resource type="Script" path="res://scenes/hand_tomato.gd" id="2_hj47h"]
-
-[node name="Tomato" instance=ExtResource("1_jorbb")]
-script = ExtResource("2_hj47h")

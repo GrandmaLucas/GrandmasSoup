@@ -1,18 +1,18 @@
 [gd_scene load_steps=61 format=3 uid="uid://cw5bvvhw2oarf"]
 
 [ext_resource type="Texture2D" uid="uid://bxubhn702bjn1" path="res://images/photoshopPlans.png" id="1_v0qne"]
-[ext_resource type="Script" path="res://scenes/gs_player.gd" id="2_0a37j"]
+[ext_resource type="Script" path="res://scripts/gs_player.gd" id="2_lefov"]
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="3_oqjwt"]
 [ext_resource type="Script" path="res://scripts/interactable.gd" id="3_pov2y"]
 [ext_resource type="Script" path="res://scripts/notebook.gd" id="4_4d8m7"]
 [ext_resource type="Texture2D" uid="uid://23ye54h72wos" path="res://images/recticle.png" id="4_41ft2"]
-[ext_resource type="Script" path="res://scenes/interact_ray.gd" id="4_ygp3s"]
+[ext_resource type="Script" path="res://scripts/interact_ray.gd" id="5_1q16o"]
 [ext_resource type="Material" uid="uid://cd74tc1wn0ku4" path="res://materials/hand_material.tres" id="6_aw774"]
 [ext_resource type="AudioStream" uid="uid://lfubh38umyeu" path="res://sfx/pickup.mp3" id="7_ygk6l"]
 [ext_resource type="AudioStream" uid="uid://1pbi60y70m61" path="res://sfx/swallow.mp3" id="8_871g2"]
 [ext_resource type="AudioStream" uid="uid://8uyko75yix6p" path="res://sfx/drop.mp3" id="9_wxun0"]
 [ext_resource type="Texture2D" uid="uid://bau2lyn50605c" path="res://assets/Pot of Stew_restaurantbits_texture.png" id="10_jgdru"]
-[ext_resource type="Script" path="res://scenes/cook.gd" id="11_eei1u"]
+[ext_resource type="Script" path="res://scripts/cook.gd" id="12_eb1bu"]
 [ext_resource type="AudioStream" uid="uid://pq1e828bv6dc" path="res://sfx/boiling.mp3" id="12_gjkgd"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_t48wy"]
@@ -1017,7 +1017,7 @@ size = Vector3(1.49483, 2.48983, 1.45825)
 [node name="CharacterBody3D" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6747, 2.55583, 0.81829)
 collision_mask = 132
-script = ExtResource("2_0a37j")
+script = ExtResource("2_lefov")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
 shape = SubResource("CapsuleShape3D_hon1n")
@@ -1078,7 +1078,7 @@ metadata/_edit_use_anchors_ = true
 [node name="InteractRay" type="RayCast3D" parent="CharacterBody3D/Head/Camera3D"]
 transform = Transform3D(1.8, 0, 0, 0, -7.86805e-08, -1.8, 0, 1.8, -7.86805e-08, 0, -0.0071789, 0)
 collision_mask = 4
-script = ExtResource("4_ygp3s")
+script = ExtResource("5_1q16o")
 
 [node name="Prompt" type="Label" parent="CharacterBody3D/Head/Camera3D/InteractRay"]
 anchors_preset = 14
@@ -1202,7 +1202,7 @@ shape = SubResource("ConcavePolygonShape3D_nynxb")
 
 [node name="Kitchen Stove Electric" type="Node3D" parent="." node_paths=PackedStringArray("player")]
 transform = Transform3D(0.0249594, 0, -2.09985, 0, 2.1, 0, 2.09985, 0, 0.0249594, -7.55846, 0.268154, 2.41409)
-script = ExtResource("11_eei1u")
+script = ExtResource("12_eb1bu")
 player = NodePath("../CharacterBody3D")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Kitchen Stove Electric"]
