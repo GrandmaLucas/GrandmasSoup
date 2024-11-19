@@ -2,3 +2,4 @@
 .godot/
 /game
 export_presets.cfg
+*.tmp

@@ -51,6 +51,9 @@ class RecipeAttempt:
 		return text
 
 func _ready():
+	# Load resources
+	var handwriting_font = load("res://fonts/kalam.ttf")
+	
 	# Get cook node reference
 	var cook_node = get_node_or_null(cook)
 	if cook_node:
@@ -65,22 +68,26 @@ func _ready():
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 	
-	# Create notebook container
+	# Set up notebook container with paper texture
 	notebook_container = PanelContainer.new()
 	notebook_container.set_anchors_preset(Control.PRESET_CENTER)
 	notebook_container.custom_minimum_size = Vector2(400, 500)
+	notebook_container.add_theme_stylebox_override("panel", get_paper_style())
 	add_child(notebook_container)
 	
 	# Create vertical container for content
 	var v_box = VBoxContainer.new()
 	notebook_container.add_child(v_box)
 	
-	# Create page content
+	# Create content with handwriting style
 	page_content = RichTextLabel.new()
 	page_content.bbcode_enabled = true
 	page_content.fit_content = true
 	page_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	page_content.custom_minimum_size = Vector2(0, 400)
+	page_content.add_theme_font_override("normal_font", handwriting_font)
+	page_content.add_theme_font_size_override("normal_font_size", 20)
+	page_content.add_theme_color_override("default_color", Color("#2B1B17"))  # Dark brown for pencil
 	v_box.add_child(page_content)
 	
 	# Create page number label
@@ -188,3 +195,19 @@ func _on_next_button_pressed():
 
 func set_player(p_player: Node3D):
 	player = p_player
+
+func get_paper_style() -> StyleBoxFlat:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color("#FFFDF3")  # Slightly off-white
+	style.border_width_left = 2
+	style.border_width_top = 2
+	style.border_width_right = 2
+	style.border_width_bottom = 2
+	style.border_color = Color("#D3D3D3")  # Light gray border
+	style.corner_radius_top_left = 5
+	style.corner_radius_top_right = 5
+	style.corner_radius_bottom_right = 5
+	style.corner_radius_bottom_left = 5
+	style.shadow_size = 4
+	style.shadow_color = Color("#00000033")  # Soft shadow
+	return style
