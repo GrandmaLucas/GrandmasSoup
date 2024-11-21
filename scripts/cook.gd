@@ -1,5 +1,5 @@
 # cook.gd
-extends Node3D
+extends Interactable
 class_name Cook
 
 @export var player: Node3D
@@ -10,16 +10,28 @@ class_name Cook
 
 var current_count: int = 0
 var collected_items = []
-var submit_hold_time: float = 0.0
+var submit_hold_time: float = -0.3
 const SUBMIT_TIME_REQUIRED: float = 1.5  # Seconds to hold E
-
-var prompt_message = ""
 
 signal recipe_submitted(results)
 signal items_received(items_count)
 
 func _ready():
+	if not player:
+		print("Player not assigned in editor!")
+		return
+
+	# Get the inventory node from the player
+	if not inventory:
+		print("Inventory not found!")
+	else:
+		print("Inventory successfully referenced.")
+
+	# Initialize ProgressBar
 	submit_progress_bar.visible = false
+	submit_progress_bar.value = 0
+	submit_progress_bar.min_value = 0
+	submit_progress_bar.max_value = 1
 
 	update_prompt()
 	# Set up the 3D label
@@ -30,6 +42,14 @@ func _ready():
 	label_3d.outline_size = 75
 	label_3d.outline_modulate = Color.BLACK
 	update_display()
+
+func focus(_player):
+	is_focused = true
+
+func unfocus():
+	is_focused = false
+	submit_hold_time = -0.3
+	submit_progress_bar.visible = false
 
 func interact(_player):
 	if inventory and inventory.held_items.size() > 0:
@@ -44,27 +64,31 @@ func _process(delta):
 		label_3d.rotation.z = 0
 		label_3d.rotation.y += PI
 
-	# Handle hold-to-submit
-	if Input.is_action_pressed("interact") and is_player_near():
-		if inventory and inventory.held_items.size() == 0:
-			submit_hold_time += delta
-
-			# Update ProgressBar
-			var progress = (submit_hold_time / SUBMIT_TIME_REQUIRED)
-			submit_progress_bar.value = progress
+	if is_focused:
+		if collected_items.size() > 0:
 			submit_progress_bar.visible = true
+		# Handle hold-to-submit
+		if Input.is_action_pressed("interact") and is_player_near():
+			if inventory and inventory.held_items.size() == 0 and collected_items.size() > 0:
+				# Only show progress bar if cook has items AND player's hands are empty
+				submit_hold_time += delta
+				var progress = submit_hold_time / SUBMIT_TIME_REQUIRED
+				submit_progress_bar.value = progress
+				submit_progress_bar.visible = true
 
-			if submit_hold_time >= SUBMIT_TIME_REQUIRED:
-				submit_hold_time = -0.3
-				submit_progress_bar.visible = false
-				if collected_items.size() > 0:
+				if submit_hold_time >= SUBMIT_TIME_REQUIRED:
+					submit_hold_time = -0.3
+					submit_progress_bar.visible = false
 					var validation_results = validate_collection()
 					emit_signal("recipe_submitted", validation_results)
 					clear_collection()
 					update_prompt()
+			else:
+				submit_hold_time = -0.3
+				submit_progress_bar.value = 0
 		else:
 			submit_hold_time = -0.3
-			submit_progress_bar.visible = false
+			submit_progress_bar.value = 0
 	else:
 		submit_hold_time = -0.3
 		submit_progress_bar.visible = false
@@ -116,22 +140,16 @@ func update_prompt():
 	if inventory and inventory.held_items.size() > 0:
 		if inventory.held_items.size() == 1:
 			prompt_message = "Give ingredient\n[E]"
-			submit_progress_bar.visible = false
 		else:
 			prompt_message = "Give ingredients\n[E]"
-			submit_progress_bar.visible = false
 	elif collected_items.size() == 0:
-		# Cook has no ingredients
 		prompt_message = "Needs ingredients\n"
-		submit_progress_bar.visible = false
 	else:
-		# Player can submit the recipe
 		prompt_message = "Hold to submit recipe\n[E]"
-		submit_progress_bar.visible = true
 
 func get_prompt():
 	update_prompt()
 	return prompt_message
 
 func is_player_near() -> bool:
-	return global_transform.origin.distance_to(player.global_transform.origin) < 2  # Adjust as needed
+	return global_transform.origin.distance_to(player.global_transform.origin) < 6

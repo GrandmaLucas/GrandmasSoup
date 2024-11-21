@@ -8,6 +8,16 @@ class_name Interactable
 @export var item_type: ItemType
 @onready var mesh = get_node_or_null(mesh_path)
 
+var is_focused = false
+
+func focus(_player):
+	is_focused = true
+	pass
+
+func unfocus():
+	is_focused = false
+	pass
+
 func _ready():
 	if !mesh:
 		for child in get_children():

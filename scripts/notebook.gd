@@ -28,7 +28,6 @@ class RecipeAttempt:
 	var items_collected: Dictionary
 	var total_items: int
 	var accuracy: float
-	var wrong_items: int
 	var feedback: String
 	
 	func _init(results: Dictionary, collected_items: Array):
@@ -42,7 +41,6 @@ class RecipeAttempt:
 		
 		total_items = results.get("total_submitted", 0)
 		accuracy = results.get("accuracy_percentage", 0.0)
-		wrong_items = results.get("wrong_items", 0)
 		feedback = results.get("feedback", "")
 
 	func format_page() -> String:
@@ -55,7 +53,6 @@ class RecipeAttempt:
 		text += "\n[b]=== Statistics ===[/b]\n"
 		text += "Total items: %d\n" % total_items
 		text += "Accuracy: %.1f%%\n" % accuracy
-		text += "Wrong items: %d\n\n" % wrong_items
 		
 		text += "[b]=== Cook's Feedback ===[/b]\n"
 		text += feedback.replace("\n", "\n• ")

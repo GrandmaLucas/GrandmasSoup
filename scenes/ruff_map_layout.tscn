@@ -1182,8 +1182,10 @@ offset_right = 50.0
 offset_bottom = 48.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 6
 max_value = 1.0
+show_percentage = false
 
 [node name="Inventory" type="Node3D" parent="CharacterBody3D/Head/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0952389)
