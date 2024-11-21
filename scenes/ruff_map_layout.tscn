@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://cw5bvvhw2oarf"]
+[gd_scene load_steps=62 format=3 uid="uid://cw5bvvhw2oarf"]
 
 [ext_resource type="Texture2D" uid="uid://bxubhn702bjn1" path="res://images/photoshopPlans.png" id="1_v0qne"]
 [ext_resource type="Script" path="res://scripts/gs_player.gd" id="2_lefov"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bau2lyn50605c" path="res://assets/Pot of Stew_restaurantbits_texture.png" id="10_jgdru"]
 [ext_resource type="Script" path="res://scripts/cook.gd" id="12_eb1bu"]
 [ext_resource type="AudioStream" uid="uid://pq1e828bv6dc" path="res://sfx/boiling.mp3" id="12_gjkgd"]
+[ext_resource type="Script" path="res://scripts/pause_menu.gd" id="15_hyw8b"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_t48wy"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -1027,53 +1028,105 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.606084, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Head"]
 
-[node name="Control" type="Control" parent="CharacterBody3D/Head/Camera3D" node_paths=PackedStringArray("player")]
+[node name="UI" type="Control" parent="CharacterBody3D/Head/Camera3D"]
 layout_mode = 3
-anchors_preset = 13
-anchor_left = 0.5
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("4_4d8m7")
-cook = NodePath("../../../../Kitchen Stove Electric")
-player = NodePath("../../..")
+mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="CharacterBody3D/Head/Camera3D"]
-custom_minimum_size = Vector2(3, 3)
+[node name="temp_information" type="Label" parent="CharacterBody3D/Head/Camera3D/UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -155.0
+offset_right = 624.0
+grow_vertical = 0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 15
+theme_override_constants/shadow_outline_size = 10
+theme_override_font_sizes/font_size = 55
+text = " TAB - to open notebook
+ Q - to discard last item"
+
+[node name="TextureRect" type="TextureRect" parent="CharacterBody3D/Head/Camera3D/UI"]
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -3.0
-offset_top = -3.0
-offset_right = 47.0
-offset_bottom = 47.0
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.12, 0.12)
+pivot_offset = Vector2(25, 25)
 mouse_filter = 2
 texture = ExtResource("4_41ft2")
 
-[node name="temp_information" type="Label" parent="CharacterBody3D/Head/Camera3D/TextureRect"]
+[node name="Notebook" type="Control" parent="CharacterBody3D/Head/Camera3D" node_paths=PackedStringArray("player")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_4d8m7")
+cook = NodePath("../../../../Kitchen Stove Electric")
+player = NodePath("../../..")
+
+[node name="NotebookContainer" type="PanelContainer" parent="CharacterBody3D/Head/Camera3D/Notebook"]
+custom_minimum_size = Vector2(400, 700)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = -157.84
-anchor_top = 59.16
-anchor_right = -67.28
-anchor_bottom = 94.38
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -419.0
+offset_top = -719.0
+offset_right = -19.0
+offset_bottom = -19.0
+grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 10
-theme_override_constants/shadow_offset_y = 35
-theme_override_constants/outline_size = 55
-theme_override_constants/shadow_outline_size = 80
-theme_override_font_sizes/font_size = 360
-text = "TAB - to open notebook
-Q - to discard last item"
-metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CharacterBody3D/Head/Camera3D/Notebook/NotebookContainer"]
+layout_mode = 2
+
+[node name="PageContent" type="RichTextLabel" parent="CharacterBody3D/Head/Camera3D/Notebook/NotebookContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 620)
+layout_mode = 2
+bbcode_enabled = true
+
+[node name="PageNumber" type="Label" parent="CharacterBody3D/Head/Camera3D/Notebook/NotebookContainer/VBoxContainer"]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="CharacterBody3D/Head/Camera3D/Notebook/NotebookContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PrevButton" type="Button" parent="CharacterBody3D/Head/Camera3D/Notebook/NotebookContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+text = "< Previous"
+
+[node name="Spacer" type="Control" parent="CharacterBody3D/Head/Camera3D/Notebook/NotebookContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NextButton" type="Button" parent="CharacterBody3D/Head/Camera3D/Notebook/NotebookContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+text = "Next >"
 
 [node name="InteractRay" type="RayCast3D" parent="CharacterBody3D/Head/Camera3D"]
 transform = Transform3D(1.8, 0, 0, 0, -7.86805e-08, -1.8, 0, 1.8, -7.86805e-08, 0, -0.0071789, 0)
@@ -1234,9 +1287,214 @@ autoplay = true
 max_distance = 10.0
 
 [node name="Label3D" type="Label3D" parent="Kitchen Stove Electric"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.224565, 0.938637, 0.213521)
+transform = Transform3D(1, 0, 9.31323e-10, 0, 1, 0, -9.31323e-10, 0, 1, -0.224565, 0.681813, 0.213521)
 visibility_range_end = 8.0
 visibility_range_end_margin = 0.3
 visibility_range_fade_mode = 1
 pixel_size = 0.0001
 font_size = 52
+
+[node name="PauseMenu" type="Control" parent="."]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("15_hyw8b")
+
+[node name="BlurryBackground" type="ColorRect" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.305882, 0.305882, 0.305882, 0.4)
+
+[node name="MainMenu" type="ColorRect" parent="PauseMenu"]
+custom_minimum_size = Vector2(275, 350)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -100.0
+offset_right = 75.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(75, 100)
+color = Color(0.162066, 0.162066, 0.162066, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="PauseMenu/MainMenu"]
+custom_minimum_size = Vector2(250, 325)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Label" type="Label" parent="PauseMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 69
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="PauseMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 26
+
+[node name="Resume" type="Button" parent="PauseMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Resume"
+
+[node name="Settings" type="Button" parent="PauseMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Settings"
+
+[node name="Quit" type="Button" parent="PauseMenu/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Quit"
+
+[node name="SettingsMenu" type="ColorRect" parent="PauseMenu"]
+visible = false
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.160784, 0.160784, 0.160784, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/SettingsMenu"]
+custom_minimum_size = Vector2(575, 375)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -275.0
+offset_top = -187.5
+offset_right = 275.0
+offset_bottom = 187.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
+text = "Settings"
+
+[node name="HSeparator" type="HSeparator" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Display Mode     "
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "Fullscreen"
+popup/item_0/id = 0
+popup/item_1/text = "Windowed"
+popup/item_1/id = 1
+
+[node name="HSeparator3" type="HSeparator" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Volume                "
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="HSlider" type="HSlider" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+max_value = 4.0
+step = 0.1
+
+[node name="HSeparator4" type="HSeparator" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Sensitivity           "
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSlider" type="HSlider" parent="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+min_value = 0.001
+max_value = 0.02
+step = 0.001
+value = 0.001
+
+[node name="HSeparator5" type="HSeparator" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/SettingsMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="PauseMenu/SettingsMenu/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Return"
+
+[connection signal="pressed" from="PauseMenu/MainMenu/MarginContainer/VBoxContainer/Resume" to="PauseMenu" method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMenu/MainMenu/MarginContainer/VBoxContainer/Settings" to="PauseMenu" method="_on_settings_button_pressed"]
+[connection signal="pressed" from="PauseMenu/MainMenu/MarginContainer/VBoxContainer/Quit" to="PauseMenu" method="_on_quit_button_pressed"]
+[connection signal="item_selected" from="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer/VBoxContainer/OptionButton" to="PauseMenu" method="_on_display_mode_selected"]
+[connection signal="value_changed" from="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer2/VBoxContainer/HSlider" to="PauseMenu" method="_on_volume_value_changed"]
+[connection signal="value_changed" from="PauseMenu/SettingsMenu/VBoxContainer/HBoxContainer3/VBoxContainer/HSlider" to="PauseMenu" method="_on_sensitivity_changed"]
+[connection signal="pressed" from="PauseMenu/SettingsMenu/VBoxContainer/VBoxContainer/Button" to="PauseMenu" method="_on_return_pressed"]

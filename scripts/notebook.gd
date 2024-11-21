@@ -1,10 +1,22 @@
+# Scene Tree Structure (.tscn):
+# Notebook (Control)
+# ├── NotebookContainer (PanelContainer)
+#     └── VBoxContainer
+#         ├── PageContent (RichTextLabel)
+#         ├── PageNumber (Label)
+#         └── ButtonContainer (HBoxContainer)
+#             ├── PrevButton (Button)
+#             ├── Spacer (Control)
+#             └── NextButton (Button)
+
 extends Control
 
-var page_content: RichTextLabel
-var page_number: Label
-var prev_button: Button
-var next_button: Button
-var notebook_container: PanelContainer
+@onready var page_content: RichTextLabel = $NotebookContainer/VBoxContainer/PageContent
+@onready var page_number: Label = $NotebookContainer/VBoxContainer/PageNumber
+@onready var prev_button: Button = $NotebookContainer/VBoxContainer/ButtonContainer/PrevButton
+@onready var next_button: Button = $NotebookContainer/VBoxContainer/ButtonContainer/NextButton
+@onready var notebook_container: PanelContainer = $NotebookContainer
+
 @export var cook: NodePath  # Assign this in editor
 @export var player: CharacterBody3D  # Assign this in editor
 
@@ -51,7 +63,7 @@ class RecipeAttempt:
 		return text
 
 func _ready():
-	# Load resources
+	# Load resources and apply styling
 	var handwriting_font = load("res://fonts/kalam.ttf")
 	
 	# Get cook node reference
@@ -64,58 +76,15 @@ func _ready():
 	else:
 		push_error("Notebook: Cook node not found! Check editor reference")
 
-	# Set up the control to take full screen
-	anchor_right = 1.0
-	anchor_bottom = 1.0
-	
-	# Set up notebook container with paper texture
-	notebook_container = PanelContainer.new()
-	notebook_container.set_anchors_preset(Control.PRESET_CENTER)
-	notebook_container.custom_minimum_size = Vector2(400, 500)
-	notebook_container.add_theme_stylebox_override("panel", get_paper_style())
-	add_child(notebook_container)
-	
-	# Create vertical container for content
-	var v_box = VBoxContainer.new()
-	notebook_container.add_child(v_box)
-	
-	# Create content with handwriting style
-	page_content = RichTextLabel.new()
-	page_content.bbcode_enabled = true
-	page_content.fit_content = true
-	page_content.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	page_content.custom_minimum_size = Vector2(0, 400)
+	# Apply styling to existing nodes
 	page_content.add_theme_font_override("normal_font", handwriting_font)
 	page_content.add_theme_font_size_override("normal_font_size", 20)
-	page_content.add_theme_color_override("default_color", Color("#2B1B17"))  # Dark brown for pencil
-	v_box.add_child(page_content)
+	page_content.add_theme_color_override("default_color", Color("#2B1B17"))
+	notebook_container.add_theme_stylebox_override("panel", get_paper_style())
 	
-	# Create page number label
-	page_number = Label.new()
-	page_number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	page_number.text = "Page 0/0"
-	v_box.add_child(page_number)
-	
-	# Create button container
-	var button_container = HBoxContainer.new()
-	button_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	v_box.add_child(button_container)
-	
-	# Create navigation buttons
-	prev_button = Button.new()
-	prev_button.text = "< Previous"
+	# Connect button signals
 	prev_button.pressed.connect(_on_prev_button_pressed)
-	button_container.add_child(prev_button)
-	
-	# Add spacer
-	var spacer = Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button_container.add_child(spacer)
-	
-	next_button = Button.new()
-	next_button.text = "Next >"
 	next_button.pressed.connect(_on_next_button_pressed)
-	button_container.add_child(next_button)
 	
 	# Initialize UI
 	update_page_buttons()
@@ -126,43 +95,41 @@ func _ready():
 	# Connect input handling
 	set_process_input(true)
 
+# Rest of the functions remain the same as in your original script
 func _input(event: InputEvent):
-	if event.is_action_pressed("toggle_notebook"):  # Define this in Project Settings > Input Map
+	if event.is_action_pressed("toggle_notebook"):
 		toggle_notebook()
 	
 	if visible:
-		if event.is_action_pressed("previous_page"):  # Define this in Project Settings
+		if event.is_action_pressed("previous_page"):
 			previous_page()
-		elif event.is_action_pressed("next_page"):  # Define this in Project Settings
+		elif event.is_action_pressed("next_page"):
 			next_page()
 
 func toggle_notebook():
 	visible = !visible
 	if visible:
-		 # Disable player movement
 		if player:
 			player.set_physics_process(false)
-		# Update content when showing notebook
 		update_page_content()
 	else:
-		# Re-enable player movement
 		if player:
 			player.set_physics_process(true)
 
 func _on_recipe_submitted(results: Dictionary):
-	print("Recipe submitted signal received")  # Debug print
+	print("Recipe submitted signal received")
 	var cook_node = get_node_or_null(cook)
 	if cook_node:
 		var attempt = RecipeAttempt.new(results, cook_node.collected_items)
-		attempts.append(attempt)  # Changed from push_front to append
-		current_page = attempts.size() - 1  # Go to last page to see newest entry
+		attempts.append(attempt)
+		current_page = attempts.size() - 1
 		update_page_content()
 		update_page_buttons()
 	else:
 		push_error("Notebook: Cook node not found! Check editor reference")
 
 func update_page_content():
-	print("Updating page content")  # Debug print
+	print("Updating page content")
 	if attempts.size() > 0:
 		var attempt = attempts[current_page]
 		page_content.text = attempt.format_page()
@@ -198,16 +165,16 @@ func set_player(p_player: Node3D):
 
 func get_paper_style() -> StyleBoxFlat:
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color("#FFFDF3")  # Slightly off-white
+	style.bg_color = Color("#FFFDF3")
 	style.border_width_left = 2
 	style.border_width_top = 2
 	style.border_width_right = 2
 	style.border_width_bottom = 2
-	style.border_color = Color("#D3D3D3")  # Light gray border
+	style.border_color = Color("#D3D3D3")
 	style.corner_radius_top_left = 5
 	style.corner_radius_top_right = 5
 	style.corner_radius_bottom_right = 5
 	style.corner_radius_bottom_left = 5
 	style.shadow_size = 4
-	style.shadow_color = Color("#00000033")  # Soft shadow
+	style.shadow_color = Color("#00000033")
 	return style
