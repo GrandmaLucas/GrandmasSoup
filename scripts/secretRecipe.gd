@@ -5,10 +5,10 @@ var required_items = {
 	"tomato": 5,
 	"carrot": 5,
 	"onion": 5,
-	#"pepper": 0,
 }
 
-var max_items = 15
+var required_total = 15  # Total items required by the recipe
+var max_items = 20       # Maximum items that can be submitted
 
 func validate_items(held_items: Array) -> Dictionary:
 	var counts = {}
@@ -28,11 +28,15 @@ func validate_items(held_items: Array) -> Dictionary:
 	
 	# Track worst differences
 	var worst_extra = {"item": "", "amount": 0}
-	var worst_over = {"item": "", "amount": 0}  
+	var worst_over = {"item": "", "amount": 0}
 	var worst_under = {"item": "", "amount": 0}
 	
+	# Calculate total required from required_items
+	var total_required = 0
+	for amount in required_items.values():
+		total_required += amount
+	
 	# Check required items
-	var total_required = max_items
 	for item_id in required_items:
 		var held = counts.get(item_id, 0)
 		var required = required_items[item_id]
@@ -43,13 +47,9 @@ func validate_items(held_items: Array) -> Dictionary:
 			if diff > worst_over.amount:
 				worst_over = {"item": item_id, "amount": diff}
 		elif diff < 0:  # Too few of this item
-			# Don't add to wrong_items here since we're counting against max_items
+			results.wrong_items += abs(diff)
 			if abs(diff) > worst_under.amount:
 				worst_under = {"item": item_id, "amount": abs(diff)}
-
-	# Only extra items (beyond max_items) count as wrong
-	if results.total_submitted > max_items:
-		results.wrong_items = results.total_submitted - max_items
 	
 	# Check extra unrequired items
 	for item_id in counts:
@@ -58,11 +58,11 @@ func validate_items(held_items: Array) -> Dictionary:
 			results.wrong_items += amount
 			if amount > worst_extra.amount:
 				worst_extra = {"item": item_id, "amount": amount}
-	print(results.wrong_items)
-	# Calculate accuracy percentage
-	results.accuracy_percentage = (1-(float(results.wrong_items) / total_required)) * 100
 	
-	# Determine worst case and set feedback
+	# Calculate accuracy percentage based on required_total
+	results.accuracy_percentage = (1 - (float(results.wrong_items) / required_total)) * 100
+	
+	# Determine feedback
 	if worst_extra.amount > 0:
 		results.feedback = "There is no %s in this recipe" % worst_extra.item
 	elif worst_over.amount > worst_under.amount:

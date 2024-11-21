@@ -1,4 +1,5 @@
 extends Node3D
+class_name Inventory
 
 @onready var item_placement: Node3D = $ItemPlacement
 @onready var hands: Node3D = $ItemPlacement/Hands
