@@ -36,15 +36,15 @@ class RecipeAttempt:
 	func format_page() -> String:
 		var text = "[center][font=res://fonts/kalam.ttf][b]Attempt #%d[/b][/font][/center]\n\n" % attempt_number
 		
-		text += "[center][font=res://fonts/kalam.ttf][b]=== Ingredients ===[/b][/font][/center]\n"
+		text += "[center][font=res://fonts/kalam.ttf][b]===== Ingredients =====[/b][/font][/center]\n"
 		for item_name in items_collected:
 			text += "[center]%s: %d[/center]\n" % [item_name, items_collected[item_name]]
 		
-		text += "\n[center][font=res://fonts/kalam.ttf][b]=== Statistics ===[/b][/font][/center]\n"
+		text += "\n[center][font=res://fonts/kalam.ttf][b]====== Statistics ======[/b][/font][/center]\n"
 		text += "[center]Total items: %d[/center]\n" % total_items
 		text += "[center]Accuracy: %.1f%%[/center]\n" % accuracy
 		
-		text += "[center][font=res://fonts/kalam.ttf][b]=== Taste Feedback ===[/b][/font][/center]\n"
+		text += "\n[center][font=res://fonts/kalam.ttf][b]==== Taste Feedback ====[/b][/font][/center]\n"
 		var formatted_feedback = feedback.replace("\n", "\n• ")
 		text += "[center]%s[/center]" % formatted_feedback
 		

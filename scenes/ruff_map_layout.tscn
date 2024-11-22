@@ -1,10 +1,11 @@
-[gd_scene load_steps=62 format=3 uid="uid://cw5bvvhw2oarf"]
+[gd_scene load_steps=64 format=3 uid="uid://cw5bvvhw2oarf"]
 
 [ext_resource type="Texture2D" uid="uid://bxubhn702bjn1" path="res://images/photoshopPlans.png" id="1_v0qne"]
 [ext_resource type="Script" path="res://scripts/gs_player.gd" id="2_lefov"]
 [ext_resource type="Script" path="res://scripts/inventory.gd" id="3_oqjwt"]
 [ext_resource type="Script" path="res://scripts/interactable.gd" id="3_pov2y"]
 [ext_resource type="Script" path="res://scripts/notebook.gd" id="4_4d8m7"]
+[ext_resource type="Shader" path="res://shaders/inventory_circle.gdshader" id="4_6t2sc"]
 [ext_resource type="Texture2D" uid="uid://23ye54h72wos" path="res://images/recticle.png" id="4_41ft2"]
 [ext_resource type="Script" path="res://scripts/interact_ray.gd" id="5_1q16o"]
 [ext_resource type="Material" uid="uid://cd74tc1wn0ku4" path="res://materials/hand_material.tres" id="6_aw774"]
@@ -45,6 +46,9 @@ size = Vector3(2.69584, 0.255005, 0.431763)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hon1n"]
 radius = 0.25
 height = 1.8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3h1q"]
+shader = ExtResource("4_6t2sc")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dyxui"]
 resource_name = "mat15"
@@ -1042,7 +1046,7 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -155.0
+offset_top = -120.0
 offset_right = 624.0
 grow_vertical = 0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -1051,7 +1055,7 @@ theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 3
 theme_override_constants/outline_size = 15
 theme_override_constants/shadow_outline_size = 10
-theme_override_font_sizes/font_size = 55
+theme_override_font_sizes/font_size = 32
 text = " TAB - to open notebook
  Q - to discard last item"
 
@@ -1089,6 +1093,35 @@ offset_bottom = 93.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CharacterBody3D/Head/Camera3D/UI"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -71.0
+offset_top = -73.0
+offset_right = 72.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="circ1" type="ColorRect" parent="CharacterBody3D/Head/Camera3D/UI/HBoxContainer"]
+material = SubResource("ShaderMaterial_l3h1q")
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+
+[node name="circ2" type="ColorRect" parent="CharacterBody3D/Head/Camera3D/UI/HBoxContainer"]
+material = SubResource("ShaderMaterial_l3h1q")
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
+
+[node name="circ3" type="ColorRect" parent="CharacterBody3D/Head/Camera3D/UI/HBoxContainer"]
+material = SubResource("ShaderMaterial_l3h1q")
+custom_minimum_size = Vector2(45, 45)
+layout_mode = 2
 
 [node name="Notebook" type="Control" parent="CharacterBody3D/Head/Camera3D" node_paths=PackedStringArray("player")]
 layout_mode = 3

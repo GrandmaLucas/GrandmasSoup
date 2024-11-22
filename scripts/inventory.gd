@@ -12,6 +12,9 @@ var current_item = null
 @onready var pickup_sfx: AudioStreamPlayer = $PickupSFX
 @onready var swallow_sfx: AudioStreamPlayer = $SwallowSFX
 @onready var drop_sfx: AudioStreamPlayer = $DropSFX
+@onready var circ_1: ColorRect = $"../UI/HBoxContainer/circ1"
+@onready var circ_2: ColorRect = $"../UI/HBoxContainer/circ2"
+@onready var circ_3: ColorRect = $"../UI/HBoxContainer/circ3"
 
 var layout_transforms = {
 	1: {  # One item
@@ -54,7 +57,9 @@ func _ready():
 	pickup_sfx.stream = pickup_stream
 	swallow_sfx.stream = swallow_stream
 	drop_sfx.stream = drop_stream
-
+	
+	update_circles(0)
+	
 func rearrange_items():
 	var current_layout = layout_transforms[held_items.size()]
 	
@@ -87,8 +92,15 @@ func pickup_item(item_mesh, should_destroy_original, item_type: ItemType):
 		print("Picked up: ", item_type.display_name)
 		print_inventory_status()
 		
+		update_circles(held_items.size())
+		
 		return should_destroy_original
 	return false
+	
+func update_circles(items_count: int):
+	circ_1.modulate = Color(1, 1, 1, 1) if items_count >= 1 else Color(0.3, 0.3, 0.3, 0.5)
+	circ_2.modulate = Color(1, 1, 1, 1) if items_count >= 2 else Color(0.3, 0.3, 0.3, 0.5)
+	circ_3.modulate = Color(1, 1, 1, 1) if items_count >= 3 else Color(0.3, 0.3, 0.3, 0.5)
 
 func drop_item():
 	if current_item and held_items.size() > 0:
@@ -99,7 +111,9 @@ func drop_item():
 			current_item = held_items[-1]
 			current_item["mesh_instance"].visible = true
 			rearrange_items()
+			update_circles(held_items.size())
 		else:
+			update_circles(0)
 			current_item = null
 			hands.visible = false
 			
@@ -117,6 +131,7 @@ func print_inventory_status():
 func submit_recipe():
 	if collector:
 		var results = collector.submit_items(held_items)
+		update_circles(0)
 		if results.get("error"):
 			print("\n=== Recipe Submission Error ===")
 			print(results.error)
@@ -128,6 +143,7 @@ func give_current_item():
 		
 		if results.success:
 			drop_sfx.play()
+			update_circles(0)
 			# Clear all visible items
 			for item_data in held_items:
 				item_data["mesh_instance"].queue_free()
