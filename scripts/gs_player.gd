@@ -4,6 +4,7 @@ extends CharacterBody3D
 @export var JUMP_VELOCITY = 4.5
 @export var MOUSE_SENSITIVITY = 0.003
 @export var GRAVITY = 9.8
+@export var SPRINT_SPEED = 6.5
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
@@ -34,9 +35,13 @@ func _physics_process(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
-	var ACCELERATION = 20.0  # Acceleration rate
+	var ACCELERATION = 25.0  # Acceleration rate
 	var DECELERATION = 15.0  # Deceleration rate
-	var SPEED = 5.0          # Maximum speed
+	var SPEED = 5.0          # Normal speed
+
+	# Check if sprint action is pressed
+	if Input.is_action_pressed("sprint"):
+		SPEED = SPRINT_SPEED  # Use sprint speed
 
 	var target_velocity = Vector3.ZERO
 
