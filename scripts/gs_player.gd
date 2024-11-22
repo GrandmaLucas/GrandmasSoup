@@ -22,21 +22,36 @@ func _unhandled_input(event):
 		inventory.drop_item()
 
 func _physics_process(delta):
+	# Apply gravity
 	if not is_on_floor():
 		velocity.y -= GRAVITY * delta
-	
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-	
-	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")	
-	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
 	else:
-		velocity.x = 0.0
-		velocity.z = 0.0
-	
+		velocity.y = 0  # Reset vertical velocity when on the ground
+
+	if Input.is_action_pressed("jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+	# Get input direction
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+
+	var ACCELERATION = 20.0  # Acceleration rate
+	var DECELERATION = 15.0  # Deceleration rate
+	var SPEED = 5.0          # Maximum speed
+
+	var target_velocity = Vector3.ZERO
+
+	if direction != Vector3.ZERO:
+		# Calculate target velocity based on input
+		target_velocity = direction * SPEED
+		# Accelerate towards target velocity
+		velocity.x = move_toward(velocity.x, target_velocity.x, ACCELERATION * delta)
+		velocity.z = move_toward(velocity.z, target_velocity.z, ACCELERATION * delta)
+	else:
+		# Decelerate to a stop when no input
+		velocity.x = move_toward(velocity.x, 0, DECELERATION * delta)
+		velocity.z = move_toward(velocity.z, 0, DECELERATION * delta)
+
+	# Move the player
 	move_and_slide()
 
 func pickup_item(item_mesh, should_destroy, item_type = null):
