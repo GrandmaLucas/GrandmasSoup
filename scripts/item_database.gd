@@ -46,12 +46,37 @@ func create_item_types():
 	mushroom.rotation_offset = Vector3(-231.2, -157.5, 22.5)
 	mushroom.position_offset = Vector3(-0.015, 0.02, 0.03)
 	
+	# Create onion type
+	var potato = ItemType.new()
+	potato.id = "potato"
+	potato.display_name = "Potato"
+	potato.held_scale = Vector3(0.28, 0.28, 0.28)
+	potato.rotation_offset = Vector3(90, 0, 75)
+	potato.position_offset = Vector3(-0.01, 0.02, 0.005)
+	
+	var meat = ItemType.new()
+	meat.id = "meat"
+	meat.display_name = "Meat"
+	meat.held_scale = Vector3(0.12, 0.12, 0.12)
+	meat.rotation_offset = Vector3(1, 0, 0)
+	meat.position_offset = Vector3(0, 0.02, 0)
+	
+	var broth = ItemType.new()
+	broth.id = "broth"
+	broth.display_name = "Broth"
+	broth.held_scale = Vector3(0.14, 0.14, 0.14)
+	broth.rotation_offset = Vector3(0, 0, 0)
+	broth.position_offset = Vector3(0, 0, 0)
+	
 	# Store in dictionary
 	items["tomato"] = tomato
 	items["carrot"] = carrot
 	items["onion"] = onion
 	items["pepper"] = pepper
 	items["mushroom"] = mushroom
+	items["potato"] = potato
+	items["meat"] = meat
+	items["broth"] = broth
 
 func get_item_type(id: String) -> ItemType:
 	return items.get(id)

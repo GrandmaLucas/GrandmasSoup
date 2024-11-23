@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://djt2uipe0mbpv"
-path="res://.godot/imported/Salt and Pepper.glb-01892716d3467475a05686ae90aed39e.scn"
+uid="uid://ngcd3hrvfikn"
+path="res://.godot/imported/Meat Raw.glb-c1c168c4865471dbab002d012e5e501c.scn"
 
 [deps]
 
-source_file="res://assets/Salt and Pepper.glb"
-dest_files=["res://.godot/imported/Salt and Pepper.glb-01892716d3467475a05686ae90aed39e.scn"]
+source_file="res://assets/Meat Raw.glb"
+dest_files=["res://.godot/imported/Meat Raw.glb-c1c168c4865471dbab002d012e5e501c.scn"]
 
 [params]
 

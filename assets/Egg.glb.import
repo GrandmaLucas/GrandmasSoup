@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://jgjh1b443wn4"
-path="res://.godot/imported/Man in Suit.glb-8f87c6b7c9702f6dabc50017a32683e2.scn"
+uid="uid://vhrrr31u41t0"
+path="res://.godot/imported/Egg.glb-d2f78a35f1f47f1598567e4dd5cfe3c6.scn"
 
 [deps]
 
-source_file="res://assets/Man in Suit.glb"
-dest_files=["res://.godot/imported/Man in Suit.glb-8f87c6b7c9702f6dabc50017a32683e2.scn"]
+source_file="res://assets/Egg.glb"
+dest_files=["res://.godot/imported/Egg.glb-d2f78a35f1f47f1598567e4dd5cfe3c6.scn"]
 
 [params]
 
