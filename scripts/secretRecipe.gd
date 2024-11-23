@@ -6,7 +6,6 @@ var required_items = {
 	"carrot": 5,
 	"onion": 5,
 }
-
 var required_total = 15  # Total items required by the recipe
 var max_items = 20       # Maximum items that can be submitted
 
@@ -31,17 +30,18 @@ func validate_items(held_items: Array) -> Dictionary:
 	var worst_over = {"item": "", "amount": 0}
 	var worst_under = {"item": "", "amount": 0}
 	
-	# Calculate total required from required_items
-	var total_required = 0
-	for amount in required_items.values():
-		total_required += amount
+	# Track correct matches for accuracy calculation
+	var correct_matches = 0
 	
 	# Check required items
 	for item_id in required_items:
 		var held = counts.get(item_id, 0)
 		var required = required_items[item_id]
-		var diff = held - required
 		
+		# Count correct matches (cannot exceed required amount)
+		correct_matches += min(held, required)
+		
+		var diff = held - required
 		if diff > 0:  # Too many of this item
 			results.wrong_items += diff
 			if diff > worst_over.amount:
@@ -59,8 +59,8 @@ func validate_items(held_items: Array) -> Dictionary:
 			if amount > worst_extra.amount:
 				worst_extra = {"item": item_id, "amount": amount}
 	
-	# Calculate accuracy percentage based on required_total
-	results.accuracy_percentage = (1 - (float(results.wrong_items) / required_total)) * 100
+	# Calculate accuracy percentage as ratio of correct matches to required total
+	results.accuracy_percentage = (float(correct_matches) / required_total) * 100
 	
 	# Determine feedback
 	if worst_extra.amount > 0:

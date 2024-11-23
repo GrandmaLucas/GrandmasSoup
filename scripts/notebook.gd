@@ -1,3 +1,4 @@
+#notebook.gd
 extends Control
 
 @onready var page_content: RichTextLabel = $NotebookContainer/VBoxContainer/PageContent
@@ -11,6 +12,7 @@ extends Control
 @export var scroll_speed: float = 25.0  # Adjust this value to change scroll speed
 
 var current_page: int = 0
+var current_attempt: RecipeAttempt  # Track current attempt
 var attempts: Array = []
 
 class RecipeAttempt:
@@ -19,9 +21,11 @@ class RecipeAttempt:
 	var total_items: int
 	var accuracy: float
 	var feedback: String
+	var is_current: bool = false  # New flag to identify current attempt
 	
-	func _init(results: Dictionary, collected_items: Array, number: int):
+	func _init(results: Dictionary, collected_items: Array, number: int, current: bool = false):
 		attempt_number = number
+		is_current = current
 		
 		# Count collected items
 		items_collected = {}
@@ -34,25 +38,34 @@ class RecipeAttempt:
 		feedback = results.get("feedback", "")
 
 	func format_page() -> String:
-		var text = "[center][font=res://fonts/kalam.ttf][b]Attempt #%d[/b][/font][/center]\n\n" % attempt_number
+		var text = ""
+		if is_current:
+			text += "[center][font=res://fonts/kalam.ttf][b]Current Attempt[/b][/font][/center]\n\n"
+		else:
+			text += "[center][font=res://fonts/kalam.ttf][b]Attempt #%d[/b][/font][/center]\n\n" % attempt_number
 		
 		text += "[center][font=res://fonts/kalam.ttf][b]===== Ingredients =====[/b][/font][/center]\n"
-		for item_name in items_collected:
-			text += "[center]%s: %d[/center]\n" % [item_name, items_collected[item_name]]
+		if items_collected.is_empty():
+			text += "[center]No ingredients added yet[/center]\n"
+		else:
+			for item_name in items_collected:
+				text += "[center]%s: %d[/center]\n" % [item_name, items_collected[item_name]]
 		
-		text += "\n[center][font=res://fonts/kalam.ttf][b]====== Statistics ======[/b][/font][/center]\n"
-		text += "[center]Total items: %d[/center]\n" % total_items
-		text += "[center]Accuracy: %.1f%%[/center]\n" % accuracy
-		
-		text += "\n[center][font=res://fonts/kalam.ttf][b]==== Taste Feedback ====[/b][/font][/center]\n"
-		var formatted_feedback = feedback.replace("\n", "\n• ")
-		text += "[center]%s[/center]" % formatted_feedback
+		if not is_current:
+			text += "\n[center][font=res://fonts/kalam.ttf][b]====== Statistics ======[/b][/font][/center]\n"
+			text += "[center]Total items: %d[/center]\n" % total_items
+			text += "[center]Accuracy: %.1f%%[/center]\n" % accuracy
+			
+			text += "\n[center][font=res://fonts/kalam.ttf][b]==== Taste Feedback ====[/b][/font][/center]\n"
+			var formatted_feedback = feedback.replace("\n", "\n• ")
+			text += "[center]%s[/center]" % formatted_feedback
 		
 		return text
 
 func _ready():
 	# Load resources and apply styling
 	var handwriting_font = load("res://fonts/kalam.ttf")
+	current_attempt = RecipeAttempt.new({}, [], 0, true)
 	
 	# Get cook node reference and connect signals
 	var cook_node = get_node_or_null(cook)
@@ -128,7 +141,13 @@ func toggle_notebook():
 	if visible:
 		if player:
 			player.set_physics_process(false)
+		# If there's a current attempt with items, show it
+		if current_attempt.items_collected.size() > 0:
+			current_page = attempts.size()
+		elif attempts.size() > 0:
+			current_page = attempts.size() - 1
 		update_page_content()
+		update_page_buttons()
 	else:
 		if player:
 			player.set_physics_process(true)
@@ -139,11 +158,21 @@ func _on_recipe_submitted(results: Dictionary):
 	if cook_node:
 		var attempt = RecipeAttempt.new(results, cook_node.collected_items, attempts.size() + 1)
 		attempts.append(attempt)
-		current_page = attempts.size() - 1
+		current_attempt = RecipeAttempt.new({}, [], 0, true)  # Reset current attempt
+		current_page = attempts.size() - 1  # Show the just-submitted attempt
 		update_page_content()
 		update_page_buttons()
 	else:
 		push_error("Notebook: Cook node not found! Check editor reference")
+		
+func _on_items_received(_item_count: int):
+	var cook_node = get_node_or_null(cook)
+	if cook_node:
+		current_attempt = RecipeAttempt.new({}, cook_node.collected_items, 0, true)
+		if visible:
+			current_page = attempts.size()  # Set to the current attempt page
+			update_page_content()
+			update_page_buttons()
 
 func get_button_style() -> StyleBoxFlat:
 	var style = StyleBoxFlat.new()
@@ -185,18 +214,26 @@ func get_paper_style() -> StyleBoxFlat:
 
 func update_page_content():
 	print("Updating page content")
-	if attempts.size() > 0:
+	if current_page == attempts.size() and current_attempt.items_collected.size() > 0:
+		# Current attempt page (only if there are items)
+		page_content.text = current_attempt.format_page()
+		page_number.text = "Page %d/%d" % [current_page + 1, attempts.size() + 1]
+	elif attempts.size() > 0:
 		var attempt = attempts[current_page]
 		page_content.text = attempt.format_page()
-		page_number.text = "Page %d/%d" % [current_page + 1, attempts.size()]
-		# Reset scroll position when changing pages
-		page_content.get_v_scroll_bar().value = 0
+		page_number.text = "Page %d/%d" % [current_page + 1, attempts.size() + (1 if current_attempt.items_collected.size() > 0 else 0)]
 	else:
 		page_content.text = "[center]No attempts recorded yet.[/center]"
 		page_number.text = "Page 1/1"
+	# Reset scroll position when changing pages
+	page_content.get_v_scroll_bar().value = 0
 
 func next_page():
-	if current_page < attempts.size() - 1:
+	var max_page = attempts.size()
+	if current_attempt.items_collected.size() > 0:
+		max_page += 1
+	
+	if current_page < max_page - 1:
 		current_page += 1
 		update_page_content()
 		update_page_buttons()
@@ -208,8 +245,12 @@ func previous_page():
 		update_page_buttons()
 
 func update_page_buttons():
+	var max_page = attempts.size()
+	if current_attempt.items_collected.size() > 0:
+		max_page += 1
+		
 	prev_button.visible = current_page > 0
-	next_button.visible = current_page < attempts.size() - 1
+	next_button.visible = current_page < max_page - 1
 
 func _on_prev_button_pressed():
 	previous_page()

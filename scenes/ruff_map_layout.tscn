@@ -1641,6 +1641,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "Return"
 
+[connection signal="items_received" from="Kitchen Stove Electric" to="CharacterBody3D/Head/Camera3D/Notebook" method="_on_items_received"]
 [connection signal="pressed" from="PauseMenu/MainMenu/MarginContainer/VBoxContainer/Resume" to="PauseMenu" method="_on_resume_pressed"]
 [connection signal="pressed" from="PauseMenu/MainMenu/MarginContainer/VBoxContainer/Settings" to="PauseMenu" method="_on_settings_button_pressed"]
 [connection signal="pressed" from="PauseMenu/MainMenu/MarginContainer/VBoxContainer/Quit" to="PauseMenu" method="_on_quit_button_pressed"]
