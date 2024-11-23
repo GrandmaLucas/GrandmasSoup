@@ -5,8 +5,8 @@ class_name Cook
 @export var player: Node3D
 @onready var label_3d: Label3D = $Label3D
 @onready var recipe = Recipe.new()
-@onready var inventory : Node3D = $"../CharacterBody3D/Head/Camera3D/Inventory"
-@onready var submit_progress_bar = $"../CharacterBody3D/Head/Camera3D/InteractRay/Prompt/SubmitProgressBar"
+@onready var inventory: Inventory = $"../../../../CharacterBody3D/Head/Camera3D/Inventory"
+@onready var submit_progress_bar: ProgressBar = $"../../../../CharacterBody3D/Head/Camera3D/InteractRay/Prompt/SubmitProgressBar"
 
 var current_count: int = 0
 var collected_items = []
