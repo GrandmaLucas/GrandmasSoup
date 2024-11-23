@@ -38,11 +38,20 @@ func create_item_types():
 	pepper.rotation_offset = Vector3(-231.2, -157.5, 22.5)
 	pepper.position_offset = Vector3(0, 0.005, 0.008)
 	
+	# Create mushroom type
+	var mushroom = ItemType.new()
+	mushroom.id = "mushroom"
+	mushroom.display_name = "Mushroom"
+	mushroom.held_scale = Vector3(0.25, 0.25, 0.25)
+	mushroom.rotation_offset = Vector3(-231.2, -157.5, 22.5)
+	mushroom.position_offset = Vector3(-0.015, 0.02, 0.03)
+	
 	# Store in dictionary
 	items["tomato"] = tomato
 	items["carrot"] = carrot
 	items["onion"] = onion
 	items["pepper"] = pepper
+	items["mushroom"] = mushroom
 
 func get_item_type(id: String) -> ItemType:
 	return items.get(id)
