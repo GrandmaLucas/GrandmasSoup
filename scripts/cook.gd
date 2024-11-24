@@ -66,7 +66,10 @@ func _process(delta):
 
 	if is_focused:
 		if collected_items.size() > 0:
-			submit_progress_bar.visible = true
+			if inventory.held_items.size() == 0:
+				submit_progress_bar.visible = true
+			else:
+				submit_progress_bar.visible = false
 		# Handle hold-to-submit
 		if Input.is_action_pressed("interact") and is_player_near():
 			if inventory and inventory.held_items.size() == 0 and collected_items.size() > 0:
@@ -138,10 +141,13 @@ func update_display():
 
 func update_prompt():
 	if inventory and inventory.held_items.size() > 0:
-		if inventory.held_items.size() == 1:
-			prompt_message = "Give ingredient\n[E]"
+		if collected_items.size() == 20:
+			prompt_message = "Max ingredients reached\n"
 		else:
-			prompt_message = "Give ingredients\n[E]"
+			if inventory.held_items.size() == 1:
+				prompt_message = "Give ingredient\n[E]"
+			else:
+				prompt_message = "Give ingredients\n[E]"
 	elif collected_items.size() == 0:
 		prompt_message = "Needs ingredients\n"
 	else:
