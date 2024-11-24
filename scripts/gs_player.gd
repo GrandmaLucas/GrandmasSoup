@@ -97,5 +97,3 @@ func _headbob(time):
 	if pos.y < -low_pos and can_play:
 		can_play = false
 		emit_signal("step")
-	
-	
