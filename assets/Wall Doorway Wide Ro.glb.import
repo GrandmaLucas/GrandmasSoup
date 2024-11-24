@@ -1,0 +1,34 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://v0fg3gll06um"
+path="res://.godot/imported/Wall Doorway Wide Ro.glb-1503c5cf7d5439d4965f73f6b256b976.scn"
+
+[deps]
+
+source_file="res://assets/Wall Doorway Wide Ro.glb"
+dest_files=["res://.godot/imported/Wall Doorway Wide Ro.glb-1503c5cf7d5439d4965f73f6b256b976.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=false
+animation/remove_immutable_tracks=true
+import_script/path=""
+_subresources={}
+gltf/naming_version=1
+gltf/embedded_image_handling=1
