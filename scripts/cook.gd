@@ -7,6 +7,7 @@ class_name Cook
 @onready var recipe = Recipe.new()
 @onready var inventory: Inventory = $"../../../../CharacterBody3D/Head/Camera3D/Inventory"
 @onready var submit_progress_bar: ProgressBar = $"../../../../CharacterBody3D/Head/Camera3D/InteractRay/Prompt/SubmitProgressBar"
+@onready var soup_level = $StaticBody3D/Soup/stew_bowl
 
 var current_count: int = 0
 var collected_items = []
@@ -86,6 +87,7 @@ func _process(delta):
 					emit_signal("recipe_submitted", validation_results)
 					clear_collection()
 					update_prompt()
+					update_soup()
 			else:
 				submit_hold_time = -0.3
 				submit_progress_bar.value = 0
@@ -121,6 +123,7 @@ func receive_items(items_array: Array) -> Dictionary:
 	current_count += results.items_accepted
 	update_display()
 	update_prompt()
+	update_soup()
 	emit_signal("items_received", results.items_accepted)
 
 	return results
@@ -159,3 +162,26 @@ func get_prompt():
 
 func is_player_near() -> bool:
 	return global_transform.origin.distance_to(player.global_transform.origin) < 6
+
+func update_soup():
+	soup_level.rotate_y(randi_range(-360, 360))
+	var audio_player = $AudioStreamPlayer3D
+	if collected_items.size() == 0:
+		soup_level.visible = false
+		audio_player.volume_db = -80
+	elif collected_items.size() >= 1 and collected_items.size() <= 4:
+		audio_player.volume_db = 6
+		soup_level.position.y = -0.3
+		soup_level.visible = true
+	elif collected_items.size() >= 5 and collected_items.size() <= 8:
+		soup_level.position.y = -0.275
+	elif collected_items.size() >= 9 and collected_items.size() <= 12:
+		soup_level.position.y = -0.25
+	elif collected_items.size() >= 13 and collected_items.size() <= 15:
+		soup_level.position.y = -0.225
+	elif collected_items.size() >= 16 and collected_items.size() <= 17:
+		soup_level.position.y = -0.20
+	elif collected_items.size() >= 18 and collected_items.size() <= 19:
+		soup_level.position.y = -0.175
+	elif collected_items.size() >= 20:
+		soup_level.position.y = -0.155
