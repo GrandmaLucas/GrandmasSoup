@@ -2,11 +2,16 @@ extends Resource
 class_name Recipe
 
 var required_items = {
-	"tomato": 5,
-	"carrot": 5,
-	"onion": 5,
+	"tomato": 2,
+	"carrot": 2,
+	"onion": 1,
+	"potato": 2,
+	"pepper": 1,
+	"mushroom": 3,
+	"meat": 1,
+	"broth": 5,
 }
-var required_total = 15  # Total items required by the recipe
+var required_total = 17  # Total items required by the recipe
 var max_items = 20       # Maximum items that can be submitted
 
 func validate_items(held_items: Array) -> Dictionary:
