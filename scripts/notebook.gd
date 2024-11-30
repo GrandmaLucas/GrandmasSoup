@@ -58,7 +58,12 @@ class RecipeAttempt:
 			if items_collected.is_empty():
 				text += "[center]No ingredients added yet[/center]\n"
 			else:
-				for item_name in items_collected:
+				# Create sorted array of keys
+				var sorted_items = items_collected.keys()
+				sorted_items.sort()
+				
+				# Display items in alphabetical order
+				for item_name in sorted_items:
 					text += "[center]%s: %d[/center]\n" % [item_name, items_collected[item_name]]
 			
 			text += "\n[center][font=res://fonts/kalam.ttf][b]====== Statistics ======[/b][/font][/center]\n"
@@ -70,7 +75,12 @@ class RecipeAttempt:
 			if items_collected.is_empty():
 				text += "[center]No ingredients added yet[/center]\n"
 			else:
-				for item_name in items_collected:
+				# Create sorted array of keys
+				var sorted_items = items_collected.keys()
+				sorted_items.sort()
+				
+				# Display items in alphabetical order
+				for item_name in sorted_items:
 					text += "[center]%s: %d[/center]\n" % [item_name, items_collected[item_name]]
 		
 			text += "\n[center][font=res://fonts/kalam.ttf][b]====== Statistics ======[/b][/font][/center]\n"
