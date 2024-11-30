@@ -132,6 +132,15 @@ func validate_collection() -> Dictionary:
 	var results = recipe.validate_items(collected_items)
 	results["total_submitted"] = collected_items.size()
 	results["wrong_items"] = results.get("wrong_items", 0)
+	
+	# Add feedback about the total number of items
+	if collected_items.size() < recipe.required_total:
+		results["item_count_feedback"] = "Needs more ingredients"
+	elif collected_items.size() > recipe.required_total:
+		results["item_count_feedback"] = "Too many ingredients"
+	else:
+		results["item_count_feedback"] = "Perfect amount of ingredients!"
+	
 	return results
 
 func clear_collection():
@@ -145,14 +154,18 @@ func update_display():
 func update_prompt():
 	if inventory and inventory.held_items.size() > 0:
 		if collected_items.size() == 20:
-			prompt_message = "Max ingredients reached\n"
+			prompt_message = "Full\n"
 		else:
 			if inventory.held_items.size() == 1:
 				prompt_message = "Give ingredient\n[E]"
+			elif collected_items.size() + inventory.held_items.size() > 20:
+				prompt_message = "Too many ingredients in hands\n"
 			else:
 				prompt_message = "Give ingredients\n[E]"
 	elif collected_items.size() == 0:
 		prompt_message = "Needs ingredients\n"
+	elif collected_items.size() == 20:
+		prompt_message = "Full, hold to submit recipe\n[E]\n"
 	else:
 		prompt_message = "Hold to submit recipe\n[E]"
 
