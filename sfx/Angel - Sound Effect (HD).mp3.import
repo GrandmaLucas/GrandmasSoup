@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dfnuq3jiox2cv"
+path="res://.godot/imported/Angel - Sound Effect (HD).mp3-5080f9e4548cb31bd7d42684cc9ce877.mp3str"
+
+[deps]
+
+source_file="res://sfx/Angel - Sound Effect (HD).mp3"
+dest_files=["res://.godot/imported/Angel - Sound Effect (HD).mp3-5080f9e4548cb31bd7d42684cc9ce877.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

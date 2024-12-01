@@ -42,6 +42,7 @@ func _on_area_3d_2_body_entered(body: Node3D) -> void:
 		bell_sfx_2.queue_free()
 		animation_player_2.queue_free()
 		area_3d_2.queue_free()
+		get_tree().change_scene_to_file("res://scenes/end_scene.tscn")
 		
 
 func perfect_recipe():

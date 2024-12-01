@@ -4,16 +4,16 @@ class_name Recipe
 signal perfect_recipe
 
 var required_items = {
-	"tomato": 1,
-	"carrot": 1,
+	"tomato": 3,
+	"carrot": 2,
 	"onion": 1,
-	"potato": 1,
+	"potato": 3,
 	"pepper": 1,
-	"mushroom": 1,
-	"meat": 1,
-	"broth": 1,
+	"mushroom": 2,
+	"meat": 2,
+	"broth": 4,
 }
-var required_total = 8  # Total items required by the recipe
+var required_total = 18  # Total items required by the recipe
 var max_items = 20       # Maximum items that can be submitted
 
 func validate_items(held_items: Array) -> Dictionary:
