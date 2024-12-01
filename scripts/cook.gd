@@ -8,6 +8,7 @@ class_name Cook
 @onready var inventory: Inventory = $"../../../../CharacterBody3D/Head/Camera3D/Inventory"
 @onready var submit_progress_bar: ProgressBar = $"../../../../CharacterBody3D/Head/Camera3D/InteractRay/Prompt/SubmitProgressBar"
 @onready var soup_level = $StaticBody3D/Soup/stew_bowl
+@onready var grandpa: Node3D = $"../../../Grandpa"
 
 var current_count: int = 0
 var collected_items = []
@@ -43,6 +44,11 @@ func _ready():
 	label_3d.outline_size = 75
 	label_3d.outline_modulate = Color.BLACK
 	update_display()
+	
+	recipe.perfect_recipe.connect(_on_perfect_recipe)
+	
+func _on_perfect_recipe():
+	grandpa.perfect_recipe()
 
 func focus(_player):
 	is_focused = true

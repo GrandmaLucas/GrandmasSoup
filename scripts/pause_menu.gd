@@ -5,6 +5,7 @@ extends Control
 @onready var volume: HSlider = $SettingsMenu/VBoxContainer/HBoxContainer2/VBoxContainer/HSlider
 @onready var player: CharacterBody3D = $"../CharacterBody3D"
 @onready var sensitivity: HSlider = $SettingsMenu/VBoxContainer/HBoxContainer3/VBoxContainer/HSlider
+@onready var button_click: AudioStreamPlayer = $"../CharacterBody3D/ButtonClick"
 
 var is_paused = false:
 	set = set_paused
@@ -33,18 +34,22 @@ func set_paused(value):
 
 func _on_resume_pressed() -> void:
 	is_paused = false
+	button_click.play()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func _on_settings_button_pressed() -> void:
 	main_menu.visible = false
 	settings_menu.visible = true
+	button_click.play()
 
 func _on_quit_button_pressed() -> void:
+	button_click.play()
 	get_tree().quit()
 	
 #Settings
 func _on_return_pressed() -> void:
+	button_click.play()
 	main_menu.visible = true
 	settings_menu.visible = false
 
